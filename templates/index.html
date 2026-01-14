@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaybyNex | Pro Habit Tracker</title>
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@700;800&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fa-solid fa-fire-pulse"></i>
+            <span>HaybyNex</span>
+        </div>
+
+        <div class="nav-links">
+            <div class="nav-item active" onclick="switchPage('dashboard')">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" onclick="switchPage('tracker')">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Tracker</span>
+            </div>
+            <div class="nav-item" onclick="switchPage('goals')">
+                <i class="fa-solid fa-bullseye"></i>
+                <span>Goals</span>
+            </div>
+            <div class="nav-item" onclick="switchPage('analytics')">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Analytics</span>
+            </div>
+            <div class="nav-item" onclick="switchPage('profile')">
+                <i class="fa-solid fa-user"></i>
+                <span>Profile</span>
+            </div>
+        </div>
+
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-color)">
+            <div class="nav-item" onclick="switchPage('settings')">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </div>
+            <a href="/export" style="text-decoration: none;">
+                <div class="nav-item">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Export PDF</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+
+        <!-- DASHBOARD -->
+        <div id="dashboard" class="page active">
+            <div id="welcomeNote"
+                style="margin-bottom: 25px; font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">
+                Welcome back, User! 👋
+            </div>
+            <div class="grid">
+                <!-- Quote Section -->
+                <div class="card"
+                    style="grid-column: span 8; background: linear-gradient(135deg, #FFB7C5 0%, #FFDAB9 100%); color: white;">
+                    <h1 style="font-size: 2.5rem; margin-bottom: 15px;">Focus on Progress, <br>Not Perfection.</h1>
+                    <p id="dashQuote" style="font-size: 1.2rem; font-style: italic; opacity: 0.9;">"The secret of your
+                        future is hidden in your daily routine."</p>
+                    <small id="dashAuthor" style="display: block; margin-top: 10px; font-weight: 700;">- Mike
+                        Murdock</small>
+                </div>
+
+                <!-- Daily Progress Doughnut (mini) -->
+                <div class="card"
+                    style="grid-column: span 4; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div style="position: relative; width: 120px; height: 120px;">
+                        <canvas id="dashDoughnut"></canvas>
+                        <div id="dashProgress"
+                            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; font-weight: 800; color: var(--accent-pink);">
+                            0%</div>
+                    </div>
+                    <h4 style="margin-top: 15px; color: var(--text-secondary);">Today's Completion</h4>
+                </div>
+
+                <!-- Stats -->
+                <div class="card stat-box" style="grid-column: span 6;">
+                    <div class="icon-holder" style="background: var(--accent-pink);"><i
+                            class="fa-solid fa-check-double"></i></div>
+                    <div>
+                        <h2 id="dashCompleted">0</h2>
+                        <p>Habits Done Today</p>
+                    </div>
+                </div>
+                <div class="card stat-box" style="grid-column: span 6;">
+                    <div class="icon-holder" style="background: var(--accent-peach);"><i
+                            class="fa-solid fa-list-check"></i></div>
+                    <div>
+                        <h2 id="dashActive">0</h2>
+                        <p>Active Habits</p>
+                    </div>
+                </div>
+
+                <!-- mini Analytics -->
+                <div class="card chart-card" style="grid-column: span 12;">
+                    <h3>Monthly Activity Pulse</h3>
+                    <div style="height: 250px;"><canvas id="dashTrendChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACKER -->
+        <div id="tracker" class="page">
+            <h1 style="margin-bottom: 30px;">Monthly Habit Tracker ✨</h1>
+            <div class="table-wrapper" id="trackerContainer">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+
+        <!-- GOALS -->
+        <div id="goals" class="page">
+            <h1 style="margin-bottom: 30px;">Milestones & Goals 🎯</h1>
+            <div class="grid" id="goalsGrid">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+
+        <!-- ANALYTICS -->
+        <div id="analytics" class="page">
+            <h1 style="margin-bottom: 30px;">Advanced Insights 📊</h1>
+            <div class="grid">
+                <div class="card chart-card"><canvas id="analyticsLineChart"></canvas></div>
+                <div class="card chart-card"><canvas id="analyticsBarChart"></canvas></div>
+                <div class="card chart-card"><canvas id="analyticsRadarChart"></canvas></div>
+                <div class="card chart-card"><canvas id="analyticsPieChart"></canvas></div>
+            </div>
+        </div>
+
+        <!-- PROFILE -->
+        <div id="profile" class="page">
+            <h1 style="margin-bottom: 30px;">My Profile 👤</h1>
+            <div class="grid">
+                <div class="card" style="grid-column: span 12; text-align: center;">
+                    <div
+                        style="width: 120px; height: 120px; background: var(--accent-pink); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white;">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <h2 id="profNameDisplay" style="margin-bottom: 10px;">User</h2>
+                    <p id="profBioDisplay" style="color: var(--text-secondary); margin-bottom: 20px;">Habit Enthusiast
+                    </p>
+                    <div style="display: flex; justify-content: center; gap: 20px; color: var(--text-secondary);">
+                        <span><i class="fa-solid fa-location-dot"></i> <span id="profLocDisplay">World</span></span>
+                    </div>
+                </div>
+
+                <div class="card" style="grid-column: span 12;">
+                    <h3>Edit Profile</h3>
+                    <div style="margin-top: 20px; display: grid; gap: 20px;">
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Full Name</label>
+                            <input type="text" id="profNameInput"
+                                style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Bio</label>
+                            <textarea id="profBioInput"
+                                style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; min-height: 80px;"></textarea>
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Location</label>
+                            <input type="text" id="profLocInput"
+                                style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd;">
+                        </div>
+                        <button onclick="updateProfile()"
+                            style="padding: 15px; background: var(--accent-purple); border: none; border-radius: 15px; color: white; font-weight: 700; cursor: pointer;">Update
+                            Profile</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SETTINGS -->
+        <div id="settings" class="page">
+            <h1 style="margin-bottom: 30px;">Preferences ⚙️</h1>
+            <div class="card" style="max-width: 500px;">
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 700;">Select Month</label>
+                    <select id="setMonth"
+                        style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd;">
+                        <option>January</option>
+                        <option>February</option>
+                        <option>March</option>
+                        <option>April</option>
+                        <option>May</option>
+                        <option>June</option>
+                        <option>July</option>
+                        <option>August</option>
+                        <option>September</option>
+                        <option>October</option>
+                        <option>November</option>
+                        <option>December</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 700;">Select Year</label>
+                    <input type="number" id="setYear"
+                        style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd;">
+                </div>
+                <button onclick="updateSettings()"
+                    style="width: 100%; padding: 15px; background: var(--accent-pink); border: none; border-radius: 15px; color: white; font-weight: 700; cursor: pointer;">Save
+                    Settings</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer
+        style="position: fixed; bottom: 0; right: 0; left: 300px; padding: 15px 50px; background: var(--glass-bg); backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); font-size: 0.9rem; z-index: 900;">
+        <div style="font-weight: 600;">Developed By Muhammad Hashir Lodhi</div>
+        <div style="display: flex; gap: 20px;">
+            <a href="https://www.linkedin.com/in/hashir-lodhi/" target="_blank"
+                style="color: #0077b5; text-decoration: none;"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+            <a href="https://medium.com/@hashirlodhi145" target="_blank"
+                style="color: #000000; text-decoration: none;"><i class="fa-brands fa-medium"></i> Medium</a>
+            <a href="https://github.com/HashirLodhi" target="_blank" style="color: #333; text-decoration: none;"><i
+                    class="fa-brands fa-github"></i> GitHub</a>
+        </div>
+    </footer>
+
+    <!-- Floating Action Button -->
+    <div class="fab" onclick="addHabit()">
+        <i class="fa-solid fa-plus"></i>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>

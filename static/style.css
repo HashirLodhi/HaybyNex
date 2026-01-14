@@ -1,0 +1,277 @@
+:root {
+    /* Enhanced Pro Palette */
+    --bg-gradient: linear-gradient(135deg, #fff5f5 0%, #fff0f6 100%);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --card-bg: #ffffff;
+    --accent-pink: #FFB7C5;
+    --accent-peach: #FFDAB9;
+    --accent-purple: #6C5CE7;
+    --accent-mint: #B2F2BB;
+    --text-primary: #2D3436;
+    --text-secondary: #636E72;
+    --border-color: rgba(0, 0, 0, 0.05);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --radius: 20px;
+    --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-primary);
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 300px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid var(--border-color);
+    padding: 50px 30px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 60px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo i {
+    color: var(--accent-pink);
+    animation: pulse 2s infinite;
+}
+
+.nav-item {
+    padding: 18px 25px;
+    border-radius: 15px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: var(--transition);
+}
+
+.nav-item:hover {
+    background: rgba(255, 183, 197, 0.1);
+    color: var(--accent-pink);
+    transform: translateX(10px);
+}
+
+.nav-item.active {
+    background: var(--card-bg);
+    color: var(--accent-pink);
+    box-shadow: var(--shadow);
+}
+
+/* Main Content */
+.main-wrapper {
+    flex: 1;
+    padding: 50px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    position: relative;
+}
+
+.page {
+    display: none;
+    animation: slideUp 0.6s ease forwards;
+}
+
+.page.active {
+    display: block;
+}
+
+/* CARDS */
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 35px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* GRID LAYOUT */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 30px;
+}
+
+/* STATS */
+.stat-box {
+    grid-column: span 4;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.icon-holder {
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: white;
+}
+
+/* TRACKER TABLE */
+.table-wrapper {
+    grid-column: span 12;
+    overflow-x: auto;
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+th,
+td {
+    padding: 15px;
+    text-align: center;
+}
+
+.habit-col {
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 10;
+    text-align: left;
+    min-width: 220px;
+    font-weight: 700;
+}
+
+/* Daily Progress Bar (Global) */
+.daily-progress-bar {
+    width: 6px;
+    height: 40px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.daily-progress-fill {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: var(--accent-pink);
+    transition: height 0.8s ease;
+}
+
+/* Modern Checkbox */
+input[type="checkbox"] {
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border: 3px solid var(--accent-pink);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    background: transparent;
+}
+
+input[type="checkbox"]:checked {
+    background: var(--accent-pink);
+}
+
+input[type="checkbox"]:checked::after {
+    content: '✔';
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+}
+
+/* Animations */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Floating Action */
+.fab {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    width: 70px;
+    height: 70px;
+    background: var(--accent-purple);
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: 0 10px 30px rgba(108, 92, 231, 0.4);
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 2000;
+}
+
+.fab:hover {
+    transform: rotate(90deg) scale(1.1);
+}
+
+/* Custom UI for charts */
+.chart-card {
+    grid-column: span 6;
+    height: 350px;
+}
